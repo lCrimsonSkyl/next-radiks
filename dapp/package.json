@@ -1,0 +1,39 @@
+{
+  "name": "dapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "server": "babel-node startDapp",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "connect-redis": "^4.0.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.0",
+    "mongoose-unique-validator": "^2.0.3",
+    "next": "9.0.5",
+    "next-redux-wrapper": "^3.0.0",
+    "nodemon": "^1.19.2",
+    "prop-types": "^15.7.2",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
+    "react-redux": "^7.1.1",
+    "redis": "^2.8.0",
+    "reduce-reducers": "^1.0.4",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.0.5",
+    "uuid": "^3.3.3",
+    "validator": "^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
+    "@babel/preset-env": "^7.6.0"
+  }
+}
