@@ -42,8 +42,13 @@ class MyApp extends App {
 
     }
 
+    componentDidMount() {
+        console.log(window.location);
+    }
+
     render() {
         const { Component, pageProps, store } = this.props;
+
         return (
             <>
                 <Head>
