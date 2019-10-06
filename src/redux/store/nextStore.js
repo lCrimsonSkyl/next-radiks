@@ -1,25 +1,29 @@
 import {
     createStore,
     applyMiddleware,
-    compose,
 } from 'redux';
 import createSagaMiddleware, { END } from 'redux-saga';
-
-import rootReducer from "../rootReducer";
-import apiSaga from "../../sagas/apiSaga";
-//   import rootSaga from './sagas';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import rootReducer from '../rootReducer';
+import apiSaga from '../../sagas/apiSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const makeStore = (initialState) => {
+const initialState = {
+    lateralMenuOpen: false,
+    notification: { visible: false, type: 'hide', message: '' },
+    remoteArticles: [],
+};
+
+const makeStore = (state = initialState) => {
     // Make exception for redux dev tools
     /* eslint-disable no-underscore-dangle */
     /* eslint-disable no-undef */
-    const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+    const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || composeWithDevTools;
     /* eslint-enable */
     const store = createStore(
         rootReducer,
-        initialState,
+        state,
         composeEnhancers(applyMiddleware(sagaMiddleware)),
     );
 
@@ -49,7 +53,6 @@ const makeStore = (initialState) => {
             store.runSaga();
         }
     };
-
     // Initial run
     store.runSaga();
 
