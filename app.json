@@ -1,0 +1,20 @@
+{
+  "addons": [
+    "mongolab"
+  ],
+  "buildpacks": [
+
+  ],
+  "description": "Personal project",
+  "env": {
+    "MONGODB_URI": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "name": "next-radiks",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
