@@ -1,22 +1,19 @@
 
 import React, { Component } from 'react';
-import { User, getConfig } from 'radiks';
+import { User } from 'radiks';
 
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import Button from '../components/Button';
 import Todo from '../radiks/models/todos';
-import Loading from '../components/Loading';
-
+import LoadingAnimation from '../components/Loading';
 
 class MainPage extends Component {
     static propTypes = {
         classes: PropTypes.object,
-        isUserSignedIn: PropTypes.func,
-        isSignInPending: PropTypes.func,
-        handlePendingSignIn: PropTypes.func,
         handleSignOut: PropTypes.func,
+        isUserSignedIn: PropTypes.func,
     };
 
     constructor(props) {
@@ -24,20 +21,27 @@ class MainPage extends Component {
         this.classes = props.classes;
         this.state = {
             loading: true,
+            todos: [],
         };
     }
 
     componentDidMount = async () => {
-        const { userSession } = getConfig();
+        const { isUserSignedIn } = this.props;
 
-        if (!userSession.isUserSignedIn()) {
+        if (!isUserSignedIn()) {
             Router.push('/');
             return;
         }
 
         await User.createWithCurrentUser();
 
-        this.setState({ loading: false });
+        // const incompleteTodos = await Todo.fetchOwnList({ // fetch todos that this user created
+        //     completed: false
+        // });
+
+        const allTodos = await Todo.fetchOwnList();
+
+        this.setState({ loading: false, todos: allTodos });
     };
 
     handleGoToProfile = () => {
@@ -61,11 +65,12 @@ class MainPage extends Component {
                         width: '100%',
                         textAlign: 'center',
                         verticalAlign: 'middle',
-                    }}>
+                    }}
+                    >
                         <tbody>
                             <tr>
                                 <td>
-                                    <Loading />
+                                    <LoadingAnimation />
                                 </td>
                             </tr>
                         </tbody>
@@ -73,6 +78,8 @@ class MainPage extends Component {
                 </div>
             );
         }
+
+        console.log(this.state.todos);
 
         return (
             <div className={this.classes.container}>

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Provider as ReduxProvider } from 'react-redux';
 import withRedux from 'next-redux-wrapper';
 
@@ -12,7 +13,7 @@ import { configure } from 'radiks';
 import nextStore from '../../redux/store/nextStore';
 import { appConfig } from '../blockstack/constants';
 
-import Loading from '../components/Loading';
+import LoadingAnimation from '../components/Loading';
 
 const isServer = typeof window === 'undefined';
 
@@ -88,7 +89,7 @@ class MyApp extends App {
                         <tbody>
                             <tr>
                                 <td>
-                                    <Loading />
+                                    <LoadingAnimation />
                                 </td>
                             </tr>
                         </tbody>
