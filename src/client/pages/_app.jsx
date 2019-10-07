@@ -1,10 +1,13 @@
 import React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
+import withRedux from 'next-redux-wrapper';
+
 import App from 'next/app';
 import Head from 'next/head';
-import withRedux from 'next-redux-wrapper';
-import { UserSession } from 'blockstack';
 import Router from 'next/router';
+
+import { UserSession } from 'blockstack';
+import { configure } from 'radiks';
 
 import nextStore from '../../redux/store/nextStore';
 import { appConfig } from '../blockstack/constants';
@@ -24,7 +27,17 @@ const isServer = typeof window === 'undefined';
 */
 /* eslint-enable */
 
+// Init BlocktStack Session
+
 const userSession = new UserSession({ appConfig });
+
+// Link blockstack with radiks server
+
+configure({
+    apiServer: 'http://localhost:3004',
+    userSession,
+});
+
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
         const pageProps = Component.getInitialProps

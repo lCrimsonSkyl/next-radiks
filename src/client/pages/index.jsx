@@ -2,15 +2,22 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/styles';
+import Button from '../components/Button';
 
 class App extends Component {
     static propTypes = {
+        classes: PropTypes.object,
         isUserSignedIn: PropTypes.func,
         isSignInPending: PropTypes.func,
         handlePendingSignIn: PropTypes.func,
         handleSignIn: PropTypes.func,
-        handleSignOut: PropTypes.func,
     };
+
+    constructor(props) {
+        super(props);
+        this.classes = props.classes;
+    }
 
     componentDidMount = async () => {
         const { isUserSignedIn, isSignInPending, handlePendingSignIn } = this.props;
@@ -23,83 +30,32 @@ class App extends Component {
         }
     };
 
-    handleGoToProfile = () => {
-        Router.push('/profile');
+    redirectToMainPage = () => {
+        Router.push('/mainPage');
     }
 
     render() {
-        const { isUserSignedIn } = this.props;
-        return (
-            <div className="App">
-                {isUserSignedIn() ? (
-                    <>
-                        <button className="button" onClick={this.props.handleSignOut}>
-                            <strong>Sign Out</strong>
-                        </button>
-                        <button className="button" onClick={this.handleGoToProfile}>
-                            <strong>Profile</strong>
-                        </button>
-                    </>
-                ) : (
-                        <button className="button" onClick={this.props.handleSignIn}>
-                            <strong>Sign In</strong>
-                        </button>
-                    )}
-                {/* <Loading /> */}
-            </div>
-        );
+        const { isUserSignedIn, handleSignIn } = this.props;
+
+        if (!isUserSignedIn()) {
+            return (
+                <div className={this.classes.container}>
+                    <Button text="Sign In" onClick={handleSignIn} />
+                </div>
+            );
+        }
+
+        this.redirectToMainPage();
+        return null;
     }
 }
 
-export default App;
+const styles = () => ({
+    container: {
+        display: 'flex',
+        height: '100vh',
+        width: '100vw',
+    },
+});
 
-// import React from 'react';
-// import { withStyles } from '@material-ui/styles';
-// import PropTypes from 'prop-types';
-// import exact from 'prop-types-exact';
-// import { connect } from 'react-redux';
-// import { showNotification } from '../../redux/rootActions';
-
-// // const isServer = typeof window === 'undefined';
-
-// @connect(null, { showNotification })
-// class App extends React.Component {
-//     static propTypes = exact({
-//         classes: PropTypes.object,
-//         showNotification: PropTypes.func,
-//     });
-
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-
-//         };
-//         this.classes = props.classes;
-//     }
-
-//     handleShowNotification = () => {
-//         this.props.showNotification({ visible: true, type: 'success', message: 'Redux Working!' });
-//     }
-
-//     render() {
-//         return (
-//             <>
-//                 <div className={this.classes.container} onClick={this.handleShowNotification}>
-//                     holaaa
-//                 </div>
-//             </>
-//         );
-//     }
-// }
-
-// const styles = () => ({
-//     container: {
-//         display: 'flex',
-//         textAlign: 'center',
-//         alignItems: 'center',
-//         width: '100vw',
-//         height: '100vh',
-//     },
-// });
-
-// export default withStyles(styles)(App);
+export default withStyles(styles)(App);

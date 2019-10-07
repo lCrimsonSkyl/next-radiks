@@ -4,10 +4,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import next from 'next';
-const path = require('path');
+
+import path from 'path';
+
+import { setup as radiskServerInstance } from 'radiks-server';
 
 import redisClient from './redisClient';
-
 
 import * as config from './config'; // Server config
 
@@ -58,6 +60,17 @@ const startServer = async () => {
     // ----------------------------------------------------------
 
     console.log('\nMounting Server Services'.cyan);
+
+    console.log('Server Routes: '.cyan + 'OK'.green);
+
+    await radiskServerInstance().then((RadiksController) => {
+        server.use('/radiks', RadiksController);
+        console.log('Radiks Server: '.cyan + 'OK'.green);
+    }).catch((ex) => {
+        console.log('Next instance: '.cyan + 'ERROR'.red);
+        console.error(ex.stack);
+        process.exit(1);
+    });
 
     // eslint-disable-next-line global-require
     server.use(require('./api/controllers/index'));
