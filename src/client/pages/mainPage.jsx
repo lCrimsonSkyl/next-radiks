@@ -5,9 +5,12 @@ import { User } from 'radiks';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
+
 import Button from '../components/Button';
+import TextField from '../components/TextField';
 import Todo from '../radiks/models/todos';
 import LoadingAnimation from '../components/Loading';
+
 
 class MainPage extends Component {
     static propTypes = {
@@ -34,10 +37,6 @@ class MainPage extends Component {
         }
 
         await User.createWithCurrentUser();
-
-        // const incompleteTodos = await Todo.fetchOwnList({ // fetch todos that this user created
-        //     completed: false
-        // });
 
         const allTodos = await Todo.fetchOwnList();
 
@@ -79,8 +78,6 @@ class MainPage extends Component {
             );
         }
 
-        console.log(this.state.todos);
-
         return (
             <div className={this.classes.container}>
                 <Button text="Sign Out" onClick={handleSignOut} style={{ margin: 5 }} />
@@ -88,6 +85,7 @@ class MainPage extends Component {
                 <div>
                     <Button text="handleCreateTodos" onClick={this.handleCreateTodos} style={{ margin: 5 }} />
                 </div>
+                <TextField />
             </div>
         );
     }

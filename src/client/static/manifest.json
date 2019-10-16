@@ -8,6 +8,6 @@
             "type": "image/png"
         }
     ],
-    "start_url": "localhost:3004",
+    "start_url": "http://127.0.0.1:3004",
     "display": "standalone"
 }

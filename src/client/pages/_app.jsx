@@ -10,6 +10,8 @@ import Router from 'next/router';
 import { UserSession } from 'blockstack';
 import { configure } from 'radiks';
 
+// import 'typeface-roboto';
+
 import nextStore from '../../redux/store/nextStore';
 import { appConfig } from '../blockstack/constants';
 

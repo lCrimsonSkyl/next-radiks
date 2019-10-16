@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import next from 'next';
-
+import morgan from 'morgan';
 import path from 'path';
 
 import { setup as radiskServerInstance } from 'radiks-server';
@@ -34,6 +34,11 @@ const startServer = async () => {
         origin: 'http://www.jonathan.com',
         optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     };
+
+    const logger = morgan(':method :url :status :res[content-length] - :response-time ms');
+
+    server.use(logger);
+
     // enable cors
     server.use(cors(corsOptions));
     console.log('CORS: '.cyan + 'OK'.green);
@@ -99,6 +104,12 @@ const startServer = async () => {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', '*');
         res.sendFile(path.join(__dirname, '..', 'client', 'static', 'manifest.json'));
+    });
+
+    server.get('/favicon.ico', (req, res) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', '*');
+        res.sendFile(path.join(__dirname, '..', 'client', 'static', 'favicon.ico'));
     });
 
     server.get('*', (req, res) => nextHandler(req, res));
