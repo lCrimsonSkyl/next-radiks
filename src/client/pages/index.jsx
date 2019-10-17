@@ -40,7 +40,7 @@ class App extends Component {
         if (!isUserSignedIn()) {
             return (
                 <div className={this.classes.container}>
-                    <Button text="Sign In" onClick={handleSignIn} />
+                    <Button label="Sign In" onClick={handleSignIn} />
                 </div>
             );
         }

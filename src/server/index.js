@@ -31,7 +31,7 @@ const startServer = async () => {
     console.log('Express instance: '.cyan + 'OK'.green);
 
     const corsOptions = {
-        origin: 'http://www.jonathan.com',
+        origin: '*',
         optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     };
 

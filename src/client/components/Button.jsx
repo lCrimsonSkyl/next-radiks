@@ -3,7 +3,7 @@ import React from 'react';
 import _JSXStyle from 'styled-jsx/style';
 
 const Button = (props) => {
-    const { text, ...otherProps } = props;
+    const { label, ...otherProps } = props;
 
     return (
         <>
@@ -17,7 +17,7 @@ const Button = (props) => {
               border-radius: 4px;
               padding: 0 16px;
               min-width: 64px;
-              height: 36px;
+              height: 34px;
               vertical-align: middle;
               text-align: center;
               text-overflow: ellipsis;
@@ -33,10 +33,6 @@ const Button = (props) => {
               outline: none;
               cursor: pointer;
               transition: box-shadow 0.2s;
-          }
-          
-          .pure-material-button-contained::-moz-focus-inner {
-              border: none;
           }
           
           /* Overlay */
@@ -97,7 +93,6 @@ const Button = (props) => {
               transition: transform 0s;
           }
           
-          /* Disabled */
           .pure-material-button-contained:disabled {
               color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.38);
               background-color: rgba(var(--pure-material-onsurface-rgb, 0, 0, 0), 0.12);
@@ -113,7 +108,7 @@ const Button = (props) => {
               opacity: 0;
           }`}
             </style>
-            <button type="button" {...otherProps} className="pure-material-button-contained">{text}</button>
+            <button type="button" {...otherProps} className="pure-material-button-contained">{label}</button>
         </>
     );
 }

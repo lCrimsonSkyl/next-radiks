@@ -3,6 +3,8 @@ import React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import withRedux from 'next-redux-wrapper';
 
+import _JSXStyle from 'styled-jsx/style';
+
 import App from 'next/app';
 import Head from 'next/head';
 import Router from 'next/router';
@@ -10,12 +12,14 @@ import Router from 'next/router';
 import { UserSession } from 'blockstack';
 import { configure } from 'radiks';
 
-// import 'typeface-roboto';
-
 import nextStore from '../../redux/store/nextStore';
-import { appConfig } from '../blockstack/constants';
+
+import 'typeface-roboto';
+
+import NavBar from '../layouts/NavBar';
 
 import LoadingAnimation from '../components/Loading';
+
 
 const isServer = typeof window === 'undefined';
 
@@ -30,16 +34,22 @@ const isServer = typeof window === 'undefined';
 */
 /* eslint-enable */
 
-// Init BlocktStack Session
 
-const userSession = new UserSession({ appConfig });
+// Init BlocktStack Session
+let userSession;
+
+if (!isServer) {
+    const { appConfig } = require('../blockstack/constants');
+
+    userSession = new UserSession({ appConfig });
+
+    configure({
+        apiServer: 'http://localhost:3004',
+        userSession,
+    });
+}
 
 // Link blockstack with radiks server
-
-configure({
-    apiServer: 'http://localhost:3004',
-    userSession,
-});
 
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -107,6 +117,18 @@ class MyApp extends App {
                     <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
                 </Head>
                 <ReduxProvider store={store}>
+                    <style jsx global>
+                        {`
+                            * {
+                                font-family: roboto;
+                            }
+                            body {
+                                margin: 0px;
+                                overflow: hidden;
+                            }
+                        `}
+                    </style>
+                    <NavBar />
                     <Component {...pageProps} {...blockstackUserManagment} />
                 </ReduxProvider>
             </>

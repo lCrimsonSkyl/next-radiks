@@ -34,12 +34,13 @@ export default class Profile extends Component {
 
     render() {
         const { person } = this.state;
+
         return (
             <div className="panel-welcome" id="section-2">
                 <div className="avatar-section">
                     <img src={person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage} className="img-rounded avatar" id="avatar-image" alt="" />
                 </div>
-                <h1>Hello, <span id="heading-name">{person.name() ? person.name() : 'Nameless Person'}</span>!</h1>
+                <h1>Hello <span id="heading-name">{person.name() ? person.name() : 'Nameless Person'}</span>!</h1>
             </div>
         );
     }
