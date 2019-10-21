@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import Button from '../components/Button';
+import Login from './login';
 
 class App extends Component {
     static propTypes = {
         classes: PropTypes.object,
-        isUserSignedIn: PropTypes.func,
+        isUserSignedIn: PropTypes.bool,
         isSignInPending: PropTypes.func,
         handlePendingSignIn: PropTypes.func,
         handleSignIn: PropTypes.func,
@@ -21,7 +21,7 @@ class App extends Component {
 
     componentDidMount = async () => {
         const { isUserSignedIn, isSignInPending, handlePendingSignIn } = this.props;
-        if (!isUserSignedIn() && isSignInPending()) {
+        if (!isUserSignedIn && isSignInPending()) {
             const userData = await handlePendingSignIn();
             if (!userData.username) {
                 throw new Error('This app requires a username');
@@ -31,17 +31,15 @@ class App extends Component {
     };
 
     redirectToMainPage = () => {
-        Router.push('/mainPage');
+        Router.push('/main');
     }
 
     render() {
         const { isUserSignedIn, handleSignIn } = this.props;
 
-        if (!isUserSignedIn()) {
+        if (!isUserSignedIn) {
             return (
-                <div className={this.classes.container}>
-                    <Button label="Sign In" onClick={handleSignIn} />
-                </div>
+                <Login handleSignIn={handleSignIn} />
             );
         }
 

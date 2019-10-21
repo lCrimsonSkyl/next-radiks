@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import {
+    Person,
+} from 'blockstack';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
@@ -7,6 +10,83 @@ import HomeIcon from '../static/icons/home';
 import NetworkIcon from '../static/icons/network';
 import MessagesIcon from '../static/icons/messages';
 import NotificationIcon from '../static/icons/notification';
+
+import LateralMenu from './LateralMenu';
+
+const tabSize = 75;
+const tabCount = 5;
+const indicatorWrapper = (tabSize * tabCount) + 10 * tabCount;
+
+function NavBar(props) {
+
+    const { loadUserData } = props;
+    const userData = loadUserData();
+    const person = new Person(userData.profile);
+    const avatarUrl = person.avatarUrl();
+    const avatar = avatarUrl ? `url(${avatarUrl})` : 'url(/static/images/placeholder.svg)';
+
+    // comes from _app
+    const { handleSignOut } = props;
+
+    const [index, setIndex] = useState(0);
+    const { classes } = props;
+    const indicatorMargin = (tabSize + 10) * index;
+
+    return (
+        <>
+            <header className={classes.container}>
+                <LateralMenu handleSignOut={handleSignOut} />
+                <Logo color="white" height="70%" style={{ marginLeft: '3em', padding: '0px 10px' }} />
+                <div className={classes.navigation}>
+                    <div className={classes.indicator}>
+                        <div style={{ marginLeft: indicatorMargin }} />
+                    </div>
+                    <Link href="/main">
+                        <a className={classes.tab} onClick={() => setIndex(0)} >
+                            <HomeIcon height="50%" />
+                            <b>Home</b>
+                        </a>
+                    </Link>
+                    <Link href="/network">
+                        <a className={classes.tab} onClick={() => setIndex(1)} >
+                            <NetworkIcon height="50%" style={{ margin: '0px 5px' }} />
+                            <b>Network</b>
+                        </a>
+                    </Link>
+                    <Link href="/oldMain">
+                        <a className={classes.tab} onClick={() => setIndex(2)} >
+                            <MessagesIcon height="50%" style={{ margin: '0px 5px' }} />
+                            <b>Messages</b>
+                        </a>
+                    </Link>
+                    <Link href="/main">
+                        <a className={classes.tab} onClick={() => setIndex(3)} >
+                            <NotificationIcon number={0} height="50%" style={{ margin: '0px 5px' }} />
+                            <b>Notifications</b>
+                        </a>
+                    </Link>
+                    <Link href="/main">
+                        <a className={classes.tab} onClick={() => setIndex(4)} >
+                            <div
+                                className={classes.avatar}
+                                style={{
+                                    margin: '0px 5px',
+                                    backgroundImage: avatar,
+                                }}
+                            />
+                            <b>Me</b>
+                        </a>
+                    </Link>
+                </div>
+            </header>
+        </>
+    );
+}
+
+NavBar.propTypes = {
+    classes: PropTypes.object.isRequired,
+    handleSignOut: PropTypes.func.isRequired,
+};
 
 const styles = () => ({
     container: {
@@ -27,19 +107,19 @@ const styles = () => ({
     indicator: {
         position: 'absolute',
         alignSelf: 'flex-end',
-        width: 'calc(100px * 4)',
+        width: indicatorWrapper, // var
         height: '4px',
         '& div': {
             height: '100%',
-            width: 90,
+            width: tabSize,
             backgroundColor: 'white',
             padding: '0px 5px',
-            transition: 'all 0.5s ease-in',
+            transition: 'all 0.35s ease-in',
         },
     },
     tab: {
         backgroundColor: 'transparent',
-        width: 90,
+        width: tabSize, // var
         textDecoration: 'none',
         display: 'flex',
         flexDirection: 'column',
@@ -47,62 +127,22 @@ const styles = () => ({
         alignItems: 'center',
         justifyContent: 'center',
         margin: '0px 5px',
-    }
-
+        '& b': {
+            fontWeight: 600,
+            color: '#FFFFFF',
+            fontSize: 13,
+            margin: 0,
+        },
+    },
+    avatar: {
+        width: 30,
+        height: 30,
+        borderRadius: '100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundColor: 'white',
+    },
 });
 
-function NavBar(props) {
-    const [index, setIndex] = useState(0);
-
-    const { classes } = props;
-    let indicatorMargin;
-    if (index === 0) indicatorMargin = 0;
-    if (index === 1) indicatorMargin = 100;
-    if (index === 2) indicatorMargin = 100 * 2;
-    if (index === 3) indicatorMargin = 100 * 3;
-
-    return (
-        <>
-            <header className={classes.container}>
-                <Logo color="white" height="70%" style={{ margin: '0px 10px' }} />
-                <div className={classes.navigation}>
-                    <div className={classes.indicator}>
-                        <div style={{ marginLeft: indicatorMargin }} />
-                    </div>
-                    <Link href="/main">
-                        <a className={classes.tab} onClick={() => setIndex(0)} >
-                            <HomeIcon height="50%" />
-                            <b style={{ fontWeight: 600, color: '#FFFFFF', fontSize: 14, margin: 0 }}>Home</b>
-                        </a>
-                    </Link>
-                    <Link href="/main">
-                        <a className={classes.tab} onClick={() => setIndex(1)} >
-                            <NetworkIcon height="50%" style={{ margin: '0px 5px' }} />
-                            <b style={{ fontWeight: 600, color: '#FFFFFF', fontSize: 14, margin: 0 }}>Network</b>
-                        </a>
-                    </Link>
-                    <Link href="/main">
-                        <a className={classes.tab} onClick={() => setIndex(2)} >
-                            <MessagesIcon height="50%" style={{ margin: '0px 5px' }} />
-                            <b style={{ fontWeight: 600, color: '#FFFFFF', fontSize: 14, margin: 0 }}>Messages</b>
-                        </a>
-                    </Link>
-                    <Link href="/main">
-                        <a className={classes.tab} onClick={() => setIndex(3)} >
-                            <NotificationIcon number={0} height="50%" style={{ margin: '0px 5px' }} />
-                            <b style={{ fontWeight: 600, color: '#FFFFFF', fontSize: 14, margin: 0 }}>Notifications</b>
-                        </a>
-                    </Link>
-
-                </div>
-            </header>
-        </>
-    );
-}
-
-NavBar.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
 export default withStyles(styles)(NavBar);
-

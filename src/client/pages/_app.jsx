@@ -49,8 +49,6 @@ if (!isServer) {
     });
 }
 
-// Link blockstack with radiks server
-
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
         const pageProps = Component.getInitialProps
@@ -74,20 +72,12 @@ class MyApp extends App {
 
     handleSignOut = () => {
         userSession.signUserOut();
+        // Mueve al usuario al login
         Router.push('/');
     };
 
     render() {
-        const { Component, pageProps, store } = this.props;
-
-        const blockstackUserManagment = {
-            handleSignIn: this.handleSignIn,
-            handleSignOut: this.handleSignOut,
-            handlePendingSignIn: this.handlePendingSignIn,
-            isUserSignedIn: this.isUserSignedIn,
-            isSignInPending: this.isSignInPending,
-            loadUserData: this.loadUserData,
-        };
+        console.log('_app render');
 
         if (isServer) {
             return (
@@ -110,6 +100,19 @@ class MyApp extends App {
             );
         }
 
+        const { Component, pageProps, store } = this.props;
+
+        const isUserSignedIn = this.isUserSignedIn();
+
+        const blockstackUserManagment = {
+            isUserSignedIn,
+            handleSignIn: this.handleSignIn,
+            handleSignOut: this.handleSignOut,
+            handlePendingSignIn: this.handlePendingSignIn,
+            isSignInPending: this.isSignInPending,
+            loadUserData: this.loadUserData,
+        };
+
         return (
             <>
                 <Head>
@@ -125,10 +128,11 @@ class MyApp extends App {
                             body {
                                 margin: 0px;
                                 overflow: hidden;
+                                background-color: #F5F5F5;
                             }
                         `}
                     </style>
-                    <NavBar />
+                    {isUserSignedIn && <NavBar handleSignOut={this.handleSignOut} loadUserData={this.loadUserData} />}
                     <Component {...pageProps} {...blockstackUserManagment} />
                 </ReduxProvider>
             </>

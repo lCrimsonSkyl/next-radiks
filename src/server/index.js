@@ -22,6 +22,7 @@ const nextHandler = nextInstance.getRequestHandler();
 
 let server;
 
+
 const startServer = async () => {
     // initalizing express instance.
     console.log('\nInitalizing Server Core'.cyan);
